@@ -15,14 +15,16 @@ var cors    = require('cors');
 var MaxiCambios     = require('./modules/maxicambios');
 var CambiosChaco    = require('./modules/cambioschaco');
 var CambiosAlberdi  = require('./modules/cambiosalberdi');
-var BancoAtlas  = require('./modules/atlas');
+var BancoAtlas      = require('./modules/atlas');
+var Interfisa       = require('./modules/interfisa');
 
 /* /todos */
 var agencias = {
     maxicambios: [],
     cambioschaco: [],
     cambiosalberdi: [],
-    bancoatlas: []
+    bancoatlas: [],
+    interfisa: []
 };
 
 /* Instanciamos una app express */
@@ -45,6 +47,24 @@ app.get('/bancoatlas', function(req, res) {
             res.json(result);
             res.end();
             console.timeEnd('BancoAtlas.getCotizaciones(): ');
+        }
+    });
+});
+
+/* GET para interfisa */
+app.get('/interfisa', function(req, res) {
+    agencias.bancoatlas = [];
+    console.time('Interfisa.getCotizaciones(): ');
+    Interfisa.getCotizaciones('https://www.interfisa.com.py/', function(error, result) {
+        if (error) {
+            res.json(agencias.interfisa);
+            res.end();
+            console.timeEnd('Interfisa.getCotizaciones(): ');
+        } else {
+            agencias.interfisa = result;
+            res.json(result);
+            res.end();
+            console.timeEnd('Interfisa.getCotizaciones(): ');
         }
     });
 });

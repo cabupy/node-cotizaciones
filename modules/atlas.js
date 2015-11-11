@@ -34,7 +34,15 @@ module.exports = {
 
         var respuesta = [];
 
-        request(url, function(error, response, html) {
+        var optionsRequest = {
+            rejectUnauthorized: false,
+            headers: {
+                "Content-Type": "application/json"
+            },
+            timeout: 2500
+        };
+
+        request(url, optionsRequest, function(error, response, html) {
 
             if (!error) {
 

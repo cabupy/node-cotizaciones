@@ -10,29 +10,23 @@ var Q = require('q');
 
 module.exports = {
 
-    getCotizaciones: function(url,callback) {
+    getCotizaciones: function(url, callback) {
 
         var deferred = Q.defer();
 
-        /* Maxi Cambios */
-        var monedasmc = [{
+        /* Banco Atlas */
+        var monedasif = [{
             moneda: "Dolar",
-            clase: '.lineas1',
-            posicion: 0,
-            compra: 7,
-            venta: 5
+            compra: 'td#dolar_compra',
+            venta: 'td#dolar_venta'
         }, {
             moneda: "Peso Argentino",
-            clase: '.lineas2',
-            posicion: 0,
-            compra: 7,
-            venta: 5
+            compra: 'td#peso_compra',
+            venta: 'td#peso_venta'
         }, {
             moneda: "Real",
-            clase: '.lineas1',
-            posicion: 1,
-            compra: 7,
-            venta: 5
+            compra: 'td#real_compra',
+            venta: 'td#real_venta'
         }, ];
 
         var respuesta = [];
@@ -45,22 +39,21 @@ module.exports = {
             timeout: 2500
         };
 
-        request(url, optionsRequest, function(error, response, html) {
+        request(url, optisonsRequest, function(error, response, html) {
 
             if (!error) {
-
                 var $ = cheerio.load(html);
-
-                monedasmc.map(function(moneda) {
+                monedasif.map(function(moneda) {
                     respuesta.push({
                         moneda: moneda.moneda,
-                        compra: $(moneda.clase)[moneda.posicion].children[moneda.compra].children[0].data.trim().replace('.','').replace(',00',''),
-                        venta: $(moneda.clase)[moneda.posicion].children[moneda.venta].children[0].data.trim().replace('.','').replace(',00','')
+                        compra: $(moneda.compra)[0].children[0].data.trim().replace('.', '').replace(',00', ''),
+                        venta: $(moneda.venta)[0].children[0].data.trim().replace('.', '').replace(',00', '')
                     });
                 });
-                console.log('MaxiCambios: \n' + JSON.stringify( respuesta, null, 2 ) );
+                console.log('InterfisaBanco: \n' + JSON.stringify(respuesta, null, 2));
                 deferred.resolve(respuesta);
             } else {
+                console.log(error);
                 deferred.reject(respuesta);
             }
         });
