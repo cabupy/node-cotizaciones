@@ -40,8 +40,8 @@ module.exports = {
                 monedasal.map(function(moneda) {
                     respuesta.push({
                         moneda: moneda.moneda,
-                        compra: $('div[class="monedas_ row-fluid"] > div[class="span2 pagination-right"] > p')[moneda.compra].children[0].data,
-                        venta: $('div[class="monedas_ row-fluid"] > div[class="span2 pagination-right"] > p')[moneda.venta].children[0].data
+                        compra: $('div[class="monedas_ row-fluid"] > div[class="span2 pagination-right"] > p')[moneda.compra].children[0].data.trim().replace('.','').replace(',00',''),
+                        venta: $('div[class="monedas_ row-fluid"] > div[class="span2 pagination-right"] > p')[moneda.venta].children[0].data.trim().replace('.','').replace(',00','')
                     });
                 });
 

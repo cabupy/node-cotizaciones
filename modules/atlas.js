@@ -14,25 +14,22 @@ module.exports = {
 
         var deferred = Q.defer();
 
-        /* Maxi Cambios */
-        var monedasmc = [{
+        /* Banco Atlas */
+        var monedasba = [{
             moneda: "Dolar",
-            clase: '.lineas1',
             posicion: 0,
-            compra: 7,
-            venta: 5
+            compra: 6,
+            venta: 10
         }, {
             moneda: "Peso Argentino",
-            clase: '.lineas2',
-            posicion: 0,
-            compra: 7,
-            venta: 5
+            posicion: 3,
+            compra: 6,
+            venta: 10
         }, {
             moneda: "Real",
-            clase: '.lineas1',
-            posicion: 1,
-            compra: 7,
-            venta: 5
+            posicion: 2,
+            compra: 6,
+            venta: 10
         }, ];
 
         var respuesta = [];
@@ -43,11 +40,11 @@ module.exports = {
 
                 var $ = cheerio.load(html);
 
-                monedasmc.map(function(moneda) {
+                monedasba.map(function(moneda) {
                     respuesta.push({
                         moneda: moneda.moneda,
-                        compra: $(moneda.clase)[moneda.posicion].children[moneda.compra].children[0].data.trim().replace('.','').replace(',00',''),
-                        venta: $(moneda.clase)[moneda.posicion].children[moneda.venta].children[0].data.trim().replace('.','').replace(',00','')
+                        compra: $('ul#monedas > li')[moneda.posicion].children[moneda.compra].data.trim().replace('.','').replace(',00',''),
+                        venta: $('ul#monedas > li')[moneda.posicion].children[moneda.venta].data.trim().replace('.','').replace(',00','')
                     });
                 });
                 console.log('MaxiCambios: \n' + JSON.stringify( respuesta, null, 2 ) );

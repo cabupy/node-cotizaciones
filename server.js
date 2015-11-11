@@ -15,12 +15,14 @@ var cors    = require('cors');
 var MaxiCambios     = require('./modules/maxicambios');
 var CambiosChaco    = require('./modules/cambioschaco');
 var CambiosAlberdi  = require('./modules/cambiosalberdi');
+var BancoAtlas  = require('./modules/atlas');
 
 /* /todos */
 var agencias = {
     maxicambios: [],
     cambioschaco: [],
-    cambiosalberdi: []
+    cambiosalberdi: [],
+    bancoatlas: []
 };
 
 /* Instanciamos una app express */
@@ -28,6 +30,24 @@ var app = express();
 
 /* Habilitamos CORS a todas las rutas */
 app.use(cors());
+
+/* GET para bancoatlas */
+app.get('/bancoatlas', function(req, res) {
+    agencias.bancoatlas = [];
+    console.time('BancoAtlas.getCotizaciones(): ');
+    BancoAtlas.getCotizaciones('http://www.bancoatlas.com.py/PERSONA/index.php?idioma=esp', function(error, result) {
+        if (error) {
+            res.json(agencias.bancoatlas);
+            res.end();
+            console.timeEnd('BancoAtlas.getCotizaciones(): ');
+        } else {
+            agencias.bancoatlas = result;
+            res.json(result);
+            res.end();
+            console.timeEnd('BancoAtlas.getCotizaciones(): ');
+        }
+    });
+});
 
 /* GET para maxicambios */
 app.get('/maxicambios', function(req, res) {

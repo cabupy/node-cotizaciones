@@ -40,8 +40,8 @@ module.exports = {
                 monedascc.map(function(moneda) {
                     respuesta.push({
                         moneda: moneda.moneda,
-                        compra: $('tr > td')[moneda.compra].children[0].data,
-                        venta: $('tr > td')[moneda.venta].children[0].data
+                        compra: $('tr > td')[moneda.compra].children[0].data.trim().replace('.','').replace(',00',''),
+                        venta: $('tr > td')[moneda.venta].children[0].data.trim().replace('.','').replace(',00','')
                     });
                 });
 
