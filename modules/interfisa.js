@@ -39,7 +39,7 @@ module.exports = {
             timeout: 2500
         };
 
-        request(url, optisonsRequest, function(error, response, html) {
+        request(url, optionsRequest, function(error, response, html) {
 
             if (!error) {
                 var $ = cheerio.load(html);
