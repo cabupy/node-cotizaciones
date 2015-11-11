@@ -141,8 +141,20 @@ app.get('/todos', function(req, res) {
             MaxiCambios.getCotizaciones('http://www.maxicambios.com.py/', function(error, result) {
                 if (!error) agencias.maxicambios = result;
                 console.timeEnd('MaxiCambios.getCotizaciones(): ');
-                /* Y .. enviamos lo que se haya cargado */
-                res.json(agencias);
+                agencias.bancoatlas = [];
+                console.time('BancoAtlas.getCotizaciones(): ');
+                BancoAtlas.getCotizaciones('http://www.bancoatlas.com.py/PERSONA/index.php?idioma=esp', function(error, result) {
+                    if (!error) agencias.bancoatlas = result;
+                    console.timeEnd('BancoAtlas.getCotizaciones(): ');
+                    agencias.interfisa = [];
+                    console.time('Interfisa.getCotizaciones(): ');
+                    Interfisa.getCotizaciones('https://www.interfisa.com.py/', function(error, result) {
+                        if (!error) agencias.interfisa = result;
+                        console.timeEnd('Interfisa.getCotizaciones(): ');
+                        /* Devolvemos lo que corresponda */
+                        res.json(agencias);
+                    }); //Interfisa
+                }); //BancoAtlas
             }); //MaxiCambios
         }); // CambiosChaco
     }); // CambiosAlberdi
