@@ -5,8 +5,6 @@ hacer el parser correspondiente y convertir eso a JSON para la API REST.
 
 Por el momento tenemos de 3 casas de cambio, vamos a ir incluyendo mas.
 
-En breve publicamos la api para que pueda ser consumida libremente.
-
 Esperamos sea de utilidad para muchos, cualquier ayuda que quieran dar,
 
 Son BIENVENIDOS !
@@ -17,6 +15,13 @@ Son BIENVENIDOS !
 - GET: /cambioschaco
 - GET: /cambiosalberdi
 - GET: /todos
+
+## Donde ?
+
+- http://cotizaciones.cabu.co/maxicambios
+- http://cotizaciones.cabu.co/cambioschaco
+- http://cotizaciones.cabu.co/cambiosalberdi
+- http://cotizaciones.cabu.co/todos
 
 ## Dependencias
 
