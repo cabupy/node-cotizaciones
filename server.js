@@ -129,7 +129,7 @@ app.get('/todos', function(req, res) {
 }); // get /todos
 
 var ip      = process.env.IP || 'localhost';
-var port    = process.env.PORT || 3000;
+var port    = process.env.PORT || 3050;
 
 var server = app.listen(port, ip, function() {
 

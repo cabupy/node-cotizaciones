@@ -3,7 +3,7 @@
 Es un api desarrollada en NODE.JS para consumir las web de casas de cambio,
 hacer el parser correspondiente y convertir eso a JSON para la API REST.
 
-Por el momento tenemos de 3 casas de cambio, vamos a ir incluyendo mas.
+Por el momento tenemos de 3 casas de cambio y 1 banco, vamos a ir incluyendo mas.
 
 Esperamos sea de utilidad para muchos, cualquier ayuda que quieran dar,
 
@@ -11,16 +11,18 @@ Son BIENVENIDOS !
 
 ## Rutas
 
-- GET: /maxicambios
-- GET: /cambioschaco
+- GET: /bancoatlas
 - GET: /cambiosalberdi
+- GET: /cambioschaco
+- GET: /maxicambios
 - GET: /todos
 
 ## Donde ?
 
-- http://cotizaciones.cabu.co/maxicambios
-- http://cotizaciones.cabu.co/cambioschaco
+- http://cotizaciones.cabu.co/bancoatlas
 - http://cotizaciones.cabu.co/cambiosalberdi
+- http://cotizaciones.cabu.co/cambioschaco
+- http://cotizaciones.cabu.co/maxicambios
 - http://cotizaciones.cabu.co/todos
 
 ## Dependencias
