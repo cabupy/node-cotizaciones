@@ -1,0 +1,14 @@
+{
+  "name": "node-cotizaciones",
+  "version": "1.0.0",
+  "description": "Buscamos las cotizaciones en la web.",
+  "main": "server.js",
+  "author": "Vamyal S.A.",
+  "dependencies": {
+    "cheerio": "latest",
+    "cors": "^2.7.1",
+    "express": "latest",
+    "q": "^1.4.1",
+    "request": "latest"
+  }
+}
