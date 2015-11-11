@@ -25,10 +25,11 @@ Son BIENVENIDOS !
 
 ## Dependencias
 
-- CORS
-- Express
-- Request
-- Cheerio
+- cheerio
+- cors
+- express
+- q
+- request
 
 ## Instalar dependencias
 
