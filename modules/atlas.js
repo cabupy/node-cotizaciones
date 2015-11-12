@@ -10,7 +10,7 @@ var Q = require('q');
 
 module.exports = {
 
-    getCotizaciones: function(url,callback) {
+    getCotizaciones: function(callback) {
 
         var deferred = Q.defer();
 
@@ -36,13 +36,14 @@ module.exports = {
 
         var optionsRequest = {
             rejectUnauthorized: false,
+            url: 'http://www.bancoatlas.com.py/PERSONA/index.php?idioma=esp',
             headers: {
                 "Content-Type": "application/json"
             },
-            timeout: 2500
+            timeout: 3000
         };
 
-        request(url, optionsRequest, function(error, response, html) {
+        request(optionsRequest, function(error, response, html) {
 
             if (!error) {
 
@@ -55,7 +56,7 @@ module.exports = {
                         venta: $('ul#monedas > li')[moneda.posicion].children[moneda.venta].data.trim().replace('.','').replace(',00','')
                     });
                 });
-                console.log('MaxiCambios: \n' + JSON.stringify( respuesta, null, 2 ) );
+                console.log('BancoAtlas: \n' + JSON.stringify( respuesta, null, 2 ) );
                 deferred.resolve(respuesta);
             } else {
                 deferred.reject(respuesta);

@@ -3,17 +3,16 @@
 Es un api desarrollada en NODE.JS para consumir las web de casas de cambio,
 hacer el parser correspondiente y convertir eso a JSON para la API REST.
 
-Por el momento tenemos de 3 casas de cambio y 2 bancos, vamos a ir incluyendo mas.
+Por el momento tenemos de 3 casas de cambio y 3 bancos, vamos a ir incluyendo mas.
 
-Esperamos sea de utilidad para muchos, cualquier ayuda que quieran dar,
-
-Son BIENVENIDOS !
+Esperamos sea de utilidad para muchos, cualquier ayuda que quieran dar .. Sean BIENVENIDOS !
 
 ## Rutas
 
 - GET: /bancoatlas
 - GET: /cambiosalberdi
 - GET: /cambioschaco
+- GET: /familiar
 - GET: /interfisa
 - GET: /maxicambios
 - GET: /todos
@@ -23,6 +22,7 @@ Son BIENVENIDOS !
 - http://cotizaciones.cabu.co/bancoatlas
 - http://cotizaciones.cabu.co/cambiosalberdi
 - http://cotizaciones.cabu.co/cambioschaco
+- http://cotizaciones.cabu.co/familiar
 - http://cotizaciones.cabu.co/interfisa
 - http://cotizaciones.cabu.co/maxicambios
 - http://cotizaciones.cabu.co/todos
@@ -40,8 +40,16 @@ Son BIENVENIDOS !
 Especificadas en package.json
 
 ```console
-npm install
+$ npm install
 ```
+
+## Para correr el server
+
+```console
+$ node server
+```
+
+
 ## Pendientes
 
 - Agregar una BD MongoDB o PostgreSQL para almacenar un historico.

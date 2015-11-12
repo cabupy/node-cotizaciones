@@ -10,7 +10,7 @@ var Q = require('q');
 
 module.exports = {
 
-    getCotizaciones: function(url,callback) {
+    getCotizaciones: function(callback) {
 
         var deferred = Q.defer();
 
@@ -39,13 +39,14 @@ module.exports = {
 
         var optionsRequest = {
             rejectUnauthorized: false,
+            url: 'http://www.maxicambios.com.py/',
             headers: {
                 "Content-Type": "application/json"
             },
             timeout: 2500
         };
 
-        request(url, optionsRequest, function(error, response, html) {
+        request(optionsRequest, function(error, response, html) {
 
             if (!error) {
 

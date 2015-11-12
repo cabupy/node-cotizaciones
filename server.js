@@ -25,7 +25,8 @@ var agencias = {
     cambioschaco: [],
     cambiosalberdi: [],
     bancoatlas: [],
-    interfisa: []
+    interfisa: [],
+    familiar: []
 };
 
 /* Instanciamos una app express */
@@ -38,7 +39,7 @@ app.use(cors());
 app.get('/bancoatlas', function(req, res) {
     agencias.bancoatlas = [];
     console.time('BancoAtlas.getCotizaciones(): ');
-    BancoAtlas.getCotizaciones('http://www.bancoatlas.com.py/PERSONA/index.php?idioma=esp', function(error, result) {
+    BancoAtlas.getCotizaciones(function(error, result) {
         if (error) {
             res.json(agencias.bancoatlas);
             res.end();
@@ -56,7 +57,7 @@ app.get('/bancoatlas', function(req, res) {
 app.get('/interfisa', function(req, res) {
     agencias.interfisa = [];
     console.time('Interfisa.getCotizaciones(): ');
-    Interfisa.getCotizaciones('https://www.interfisa.com.py/', function(error, result) {
+    Interfisa.getCotizaciones(function(error, result) {
         if (error) {
             res.json(agencias.interfisa);
             res.end();
@@ -92,7 +93,7 @@ app.get('/familiar', function(req, res) {
 app.get('/maxicambios', function(req, res) {
     agencias.maxicambios = [];
     console.time('MaxiCambios.getCotizaciones(): ');
-    MaxiCambios.getCotizaciones('http://www.maxicambios.com.py/', function(error, result) {
+    MaxiCambios.getCotizaciones(function(error, result) {
         if (error) {
             res.json(agencias.maxicambios);
             res.end();
@@ -110,7 +111,7 @@ app.get('/maxicambios', function(req, res) {
 app.get('/cambioschaco', function(req, res) {
     agencias.cambioschaco = [];
     console.time('CambiosChaco.getCotizaciones(): ');
-    CambiosChaco.getCotizaciones('http://www.cambioschaco.com.py/php/imprimir_.php', function(error, result) {
+    CambiosChaco.getCotizaciones(function(error, result) {
         if (error) {
             res.json(agencias.cambioschaco);
             res.end();
@@ -128,7 +129,7 @@ app.get('/cambioschaco', function(req, res) {
 app.get('/cambiosalberdi', function(req, res) {
     agencias.cambiosalberdi = [];
     console.time('CambiosAlberdi.getCotizaciones(): ');
-    CambiosAlberdi.getCotizaciones('http://www.cambiosalberdi.com/', function(error, result) {
+    CambiosAlberdi.getCotizaciones(function(error, result) {
         if (error) {
             res.json(agencias.cambiosalberdi);
             res.end();
@@ -147,31 +148,37 @@ app.get('/todos', function(req, res) {
     /* Arrancamos por Alberdi ... luego Chaco y al final Maxi ... */
     agencias.cambiosalberdi = [];
     console.time('CambiosAlberdi.getCotizaciones(): ');
-    CambiosAlberdi.getCotizaciones('http://www.cambiosalberdi.com/', function(error, result) {
+    CambiosAlberdi.getCotizaciones(function(error, result) {
         if (!error) agencias.cambiosalberdi = result;
         console.timeEnd('CambiosAlberdi.getCotizaciones(): ');
         agencias.cambioschaco = [];
         console.time('CambiosChaco.getCotizaciones(): ');
-        CambiosChaco.getCotizaciones('http://www.cambioschaco.com.py/php/imprimir_.php', function(error, result) {
+        CambiosChaco.getCotizaciones(function(error, result) {
             if (!error) agencias.cambioschaco = result;
             console.timeEnd('CambiosChaco.getCotizaciones(): ');
             agencias.maxicambios = [];
             console.time('MaxiCambios.getCotizaciones(): ');
-            MaxiCambios.getCotizaciones('http://www.maxicambios.com.py/', function(error, result) {
+            MaxiCambios.getCotizaciones(function(error, result) {
                 if (!error) agencias.maxicambios = result;
                 console.timeEnd('MaxiCambios.getCotizaciones(): ');
                 agencias.bancoatlas = [];
                 console.time('BancoAtlas.getCotizaciones(): ');
-                BancoAtlas.getCotizaciones('http://www.bancoatlas.com.py/PERSONA/index.php?idioma=esp', function(error, result) {
+                BancoAtlas.getCotizaciones(function(error, result) {
                     if (!error) agencias.bancoatlas = result;
                     console.timeEnd('BancoAtlas.getCotizaciones(): ');
                     agencias.interfisa = [];
                     console.time('Interfisa.getCotizaciones(): ');
-                    Interfisa.getCotizaciones('https://www.interfisa.com.py/', function(error, result) {
+                    Interfisa.getCotizaciones(function(error, result) {
                         if (!error) agencias.interfisa = result;
                         console.timeEnd('Interfisa.getCotizaciones(): ');
-                        /* Devolvemos lo que corresponda */
-                        res.json(agencias);
+                        agencias.familiar = [];
+                        console.time('Familiar.getCotizaciones(): ');
+                        Familiar.getCotizaciones(function(error, result) {
+                            if (!error) agencias.familiar = result;
+                            console.timeEnd('Familiar.getCotizaciones(): ');
+                            /* Devolvemos lo que corresponda */
+                            res.json(agencias);
+                        }); //Familiar
                     }); //Interfisa
                 }); //BancoAtlas
             }); //MaxiCambios
