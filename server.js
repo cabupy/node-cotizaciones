@@ -17,6 +17,7 @@ var CambiosChaco    = require('./modules/cambioschaco');
 var CambiosAlberdi  = require('./modules/cambiosalberdi');
 var BancoAtlas      = require('./modules/atlas');
 var Interfisa       = require('./modules/interfisa');
+var Familiar        = require('./modules/familiar');
 
 /* /todos */
 var agencias = {
@@ -53,7 +54,7 @@ app.get('/bancoatlas', function(req, res) {
 
 /* GET para interfisa */
 app.get('/interfisa', function(req, res) {
-    agencias.bancoatlas = [];
+    agencias.interfisa = [];
     console.time('Interfisa.getCotizaciones(): ');
     Interfisa.getCotizaciones('https://www.interfisa.com.py/', function(error, result) {
         if (error) {
@@ -65,6 +66,24 @@ app.get('/interfisa', function(req, res) {
             res.json(result);
             res.end();
             console.timeEnd('Interfisa.getCotizaciones(): ');
+        }
+    });
+});
+
+/* GET para familiar */
+app.get('/familiar', function(req, res) {
+    agencias.familiar = [];
+    console.time('Familiar.getCotizaciones(): ');
+    Familiar.getCotizaciones(function(error, result) {
+        if (error) {
+            res.json(agencias.familiar);
+            res.end();
+            console.timeEnd('Familiar.getCotizaciones(): ');
+        } else {
+            agencias.familiar = result;
+            res.json(result);
+            res.end();
+            console.timeEnd('Familiar.getCotizaciones(): ');
         }
     });
 });
