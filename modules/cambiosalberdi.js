@@ -8,61 +8,35 @@ var request = require('request');
 var cheerio = require('cheerio');
 var Q = require('q');
 
+/* Config */
+var Config = require(__dirname + '/../config/config');
+
 module.exports = {
-
     getCotizaciones: function(callback) {
-
         var deferred = Q.defer();
-
-        /* Cambios Alberdi */
-        var monedasal = [{
-            moneda: "Dolar",
-            compra: 0,
-            venta: 1
-        }, {
-            moneda: "Peso Argentino",
-            compra: 2,
-            venta: 3
-        }, {
-            moneda: "Real",
-            compra: 4,
-            venta: 5
-        }];
-
         var respuesta = [];
-
-        var optionsRequest = {
-            rejectUnauthorized: false,
-            url: 'http://www.cambiosalberdi.com/',
-            headers: {
-                "Content-Type": "application/json"
-            },
-            timeout: 2500
-        };
-
+        var optionsRequest = Config.optionsRequest;
+        optionsRequest.url = 'http://www.cambiosalberdi.com/';
         request(optionsRequest, function(error, response, html) {
-
             if (!error) {
-
                 var $ = cheerio.load(html);
-
-                monedasal.map(function(moneda) {
+                Config.parseCambiosAlberdi.map(function(moneda) {
+                    var compra = $('div[class="monedas_ row-fluid"] > div[class="span2 pagination-right"] > p')[moneda.compra].children[0].data.trim().replace('.', '').replace(',00', '');
+                    var venta = $('div[class="monedas_ row-fluid"] > div[class="span2 pagination-right"] > p')[moneda.venta].children[0].data.trim().replace('.', '').replace(',00', '');
                     respuesta.push({
                         moneda: moneda.moneda,
-                        compra: $('div[class="monedas_ row-fluid"] > div[class="span2 pagination-right"] > p')[moneda.compra].children[0].data.trim().replace('.','').replace(',00',''),
-                        venta: $('div[class="monedas_ row-fluid"] > div[class="span2 pagination-right"] > p')[moneda.venta].children[0].data.trim().replace('.','').replace(',00','')
+                        compra: parseInt(compra),
+                        venta: parseInt(venta),
+                        spread: parseInt(venta) - parseInt(compra)
                     });
                 });
-
-                console.log('CambiosAlberdi: \n' + JSON.stringify( respuesta, null, 2 ) );
+                console.log('CambiosAlberdi: \n' + JSON.stringify(respuesta, null, 2));
                 deferred.resolve(respuesta);
             } else {
                 deferred.reject(respuesta);
             }
         });
-
         deferred.promise.nodeify(callback);
         return deferred.promise;
-
     }
 };

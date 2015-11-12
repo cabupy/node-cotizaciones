@@ -8,47 +8,26 @@ var request = require('request');
 var cheerio = require('cheerio');
 var Q = require('q');
 
+/* Config */
+var Config = require(__dirname + '/../config/config');
+
 module.exports = {
-
     getCotizaciones: function(callback) {
-
         var deferred = Q.defer();
-
-        /* Banco Atlas */
-        var monedasif = [{
-            moneda: "Dolar",
-            compra: 'td#dolar_compra',
-            venta: 'td#dolar_venta'
-        }, {
-            moneda: "Peso Argentino",
-            compra: 'td#peso_compra',
-            venta: 'td#peso_venta'
-        }, {
-            moneda: "Real",
-            compra: 'td#real_compra',
-            venta: 'td#real_venta'
-        }, ];
-
         var respuesta = [];
-
-        var optionsRequest = {
-            rejectUnauthorized: false,
-            url: 'https://www.interfisa.com.py/',
-            headers: {
-                "Content-Type": "application/json"
-            },
-            timeout: 2500
-        };
-
+        var optionsRequest = Config.optionsRequest;
+        optionsRequest.url = 'https://www.interfisa.com.py/';
         request(optionsRequest, function(error, response, html) {
-
             if (!error) {
                 var $ = cheerio.load(html);
-                monedasif.map(function(moneda) {
+                Config.parseInterfisa.map(function(moneda) {
+                    var compra = $(moneda.compra)[0].children[0].data.trim().replace('.', '').replace(',00', '');
+                    var venta = $(moneda.venta)[0].children[0].data.trim().replace('.', '').replace(',00', '');
                     respuesta.push({
                         moneda: moneda.moneda,
-                        compra: $(moneda.compra)[0].children[0].data.trim().replace('.', '').replace(',00', ''),
-                        venta: $(moneda.venta)[0].children[0].data.trim().replace('.', '').replace(',00', '')
+                        compra: parseInt(compra),
+                        venta: parseInt(venta),
+                        spread: parseInt(venta) - parseInt(compra)
                     });
                 });
                 console.log('InterfisaBanco: \n' + JSON.stringify(respuesta, null, 2));
@@ -58,9 +37,7 @@ module.exports = {
                 deferred.reject(respuesta);
             }
         });
-
         deferred.promise.nodeify(callback);
         return deferred.promise;
-
     }
 };

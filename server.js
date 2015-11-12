@@ -4,12 +4,14 @@
     Noviembre del 2015
 */
 
-
 /* librerias requeridas */
 var express = require('express');
 var request = require('request');
 var cheerio = require('cheerio');
 var cors    = require('cors');
+
+/* Config */
+var Config  = require('./config/config');
 
 /* Modulos */
 var MaxiCambios     = require('./modules/maxicambios');
@@ -145,7 +147,6 @@ app.get('/cambiosalberdi', function(req, res) {
 
 /* GET para enviar un JSON con todas las agencias */
 app.get('/todos', function(req, res) {
-    /* Arrancamos por Alberdi ... luego Chaco y al final Maxi ... */
     agencias.cambiosalberdi = [];
     console.time('CambiosAlberdi.getCotizaciones(): ');
     CambiosAlberdi.getCotizaciones(function(error, result) {
@@ -186,8 +187,14 @@ app.get('/todos', function(req, res) {
     }); // CambiosAlberdi
 }); // get /todos
 
-var ip      = process.env.IP || 'localhost';
-var port    = process.env.PORT || 3050;
+app.get('*', function(req, res) {
+    var fecha = new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '');
+    var datos = { api : 'API de VAMYAL S.A.', fechaUTC : fecha };
+    res.json(datos);
+});
+
+var ip      = process.env.IP || Config.ip;
+var port    = process.env.PORT || Config.port;
 
 var server = app.listen(port, ip, function() {
 

@@ -8,52 +8,26 @@ var request = require('request');
 var cheerio = require('cheerio');
 var Q = require('q');
 
+/* Config */
+var Config = require(__dirname + '/../config/config');
+
 module.exports = {
-
     getCotizaciones: function(callback) {
-
         var deferred = Q.defer();
-
-        /* Banco Atlas */
-        var monedasba = [{
-            moneda: "Dolar",
-            posicion: 0,
-            compra: 6,
-            venta: 10
-        }, {
-            moneda: "Peso Argentino",
-            posicion: 3,
-            compra: 6,
-            venta: 10
-        }, {
-            moneda: "Real",
-            posicion: 2,
-            compra: 6,
-            venta: 10
-        }, ];
-
         var respuesta = [];
-
-        var optionsRequest = {
-            rejectUnauthorized: false,
-            url: 'http://www.bancoatlas.com.py/PERSONA/index.php?idioma=esp',
-            headers: {
-                "Content-Type": "application/json"
-            },
-            timeout: 3000
-        };
-
+        var optionsRequest = Config.optionsRequest;
+        optionsRequest.url = 'http://www.bancoatlas.com.py/PERSONA/index.php?idioma=esp';
         request(optionsRequest, function(error, response, html) {
-
             if (!error) {
-
                 var $ = cheerio.load(html);
-
-                monedasba.map(function(moneda) {
+                Config.parseBancoAtlas.map(function(moneda) {
+                    var compra = $('ul#monedas > li')[moneda.posicion].children[moneda.compra].data.trim().replace('.','').replace(',00','');
+                    var venta = $('ul#monedas > li')[moneda.posicion].children[moneda.venta].data.trim().replace('.','').replace(',00','');
                     respuesta.push({
                         moneda: moneda.moneda,
-                        compra: $('ul#monedas > li')[moneda.posicion].children[moneda.compra].data.trim().replace('.','').replace(',00',''),
-                        venta: $('ul#monedas > li')[moneda.posicion].children[moneda.venta].data.trim().replace('.','').replace(',00','')
+                        compra: parseInt(compra),
+                        venta: parseInt(venta),
+                        spread: parseInt(venta) - parseInt(compra)
                     });
                 });
                 console.log('BancoAtlas: \n' + JSON.stringify( respuesta, null, 2 ) );
@@ -62,9 +36,7 @@ module.exports = {
                 deferred.reject(respuesta);
             }
         });
-
         deferred.promise.nodeify(callback);
         return deferred.promise;
-
     }
 };
