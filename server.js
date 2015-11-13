@@ -5,30 +5,32 @@
 */
 
 /* librerias requeridas */
+var cheerio = require('cheerio');
+var cors = require('cors');
 var express = require('express');
 var request = require('request');
-var cheerio = require('cheerio');
-var cors    = require('cors');
 
 /* Config */
-var Config  = require('./config/config');
+var Config = require('./config/config');
 
 /* Modulos */
-var MaxiCambios     = require('./modules/maxicambios');
-var CambiosChaco    = require('./modules/cambioschaco');
-var CambiosAlberdi  = require('./modules/cambiosalberdi');
-var BancoAtlas      = require('./modules/atlas');
-var Interfisa       = require('./modules/interfisa');
-var Familiar        = require('./modules/familiar');
+var BancoAtlas = require('./modules/atlas');
+var BancoBBVA = require('./modules/bbva');
+var CambiosAlberdi = require('./modules/cambiosalberdi');
+var CambiosChaco = require('./modules/cambioschaco');
+var Familiar = require('./modules/familiar');
+var Interfisa = require('./modules/interfisa');
+var MaxiCambios = require('./modules/maxicambios');
 
 /* /todos */
 var agencias = {
-    maxicambios: [],
-    cambioschaco: [],
-    cambiosalberdi: [],
     bancoatlas: [],
+    bancobbva: [],
+    cambiosalberdi: [],
+    cambioschaco: [],
+    familiar: [],
     interfisa: [],
-    familiar: []
+    maxicambios: []
 };
 
 /* Instanciamos una app express */
@@ -36,6 +38,14 @@ var app = express();
 
 /* Habilitamos CORS a todas las rutas */
 app.use(cors());
+
+app.set('x-powered-by', false);
+
+// Agragamos el header powered-by Vamyal S.A. en un middleware
+app.use(function(req, res, next) {
+    res.header('X-Powered-By', 'Vamyal S.A. <vamyal.com>');
+    next();
+});
 
 /* GET para bancoatlas */
 app.get('/bancoatlas', function(req, res) {
@@ -51,6 +61,24 @@ app.get('/bancoatlas', function(req, res) {
             res.json(result);
             res.end();
             console.timeEnd('BancoAtlas.getCotizaciones(): ');
+        }
+    });
+});
+
+/* GET para bancobbva */
+app.get('/bancobbva', function(req, res) {
+    agencias.bancobbva = [];
+    console.time('BancoBBVA.getCotizaciones(): ');
+    BancoBBVA.getCotizaciones(function(error, result) {
+        if (error) {
+            res.json(agencias.bancobbva);
+            res.end();
+            console.timeEnd('BancoBBVA.getCotizaciones(): ');
+        } else {
+            agencias.bancobbva = result;
+            res.json(result);
+            res.end();
+            console.timeEnd('BancoBBVA.getCotizaciones(): ');
         }
     });
 });
@@ -177,8 +205,14 @@ app.get('/todos', function(req, res) {
                         Familiar.getCotizaciones(function(error, result) {
                             if (!error) agencias.familiar = result;
                             console.timeEnd('Familiar.getCotizaciones(): ');
-                            /* Devolvemos lo que corresponda */
-                            res.json(agencias);
+                            agencias.bancobbva = [];
+                            console.time('BancoBBVA.getCotizaciones(): ');
+                            BancoBBVA.getCotizaciones(function(error, result) {
+                                if (!error) agencias.bancobbva = result;
+                                console.timeEnd('BancoBBVA.getCotizaciones(): ');
+                                /* Devolvemos lo que corresponda */
+                                res.json(agencias);
+                            }); //BancoBBVA
                         }); //Familiar
                     }); //Interfisa
                 }); //BancoAtlas
@@ -189,12 +223,15 @@ app.get('/todos', function(req, res) {
 
 app.get('*', function(req, res) {
     var fecha = new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '');
-    var datos = { api : 'API de VAMYAL S.A.', fechaUTC : fecha };
+    var datos = {
+        api: 'API de VAMYAL S.A.',
+        fechaUTC: fecha
+    };
     res.json(datos);
 });
 
-var ip      = process.env.IP || Config.ip;
-var port    = process.env.PORT || Config.port;
+var ip = process.env.IP || Config.ip;
+var port = process.env.PORT || Config.port;
 
 var server = app.listen(port, ip, function() {
 

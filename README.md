@@ -3,13 +3,14 @@
 Es un api desarrollada en NODE.JS para consumir las web de casas de cambio,
 hacer el parser correspondiente y convertir eso a JSON para la API REST.
 
-Por el momento tenemos de 3 casas de cambio y 3 bancos, vamos a ir incluyendo mas.
+Por el momento tenemos de 3 casas de cambio y 4 bancos, vamos a ir incluyendo mas.
 
 Esperamos sea de utilidad para muchos, cualquier ayuda que quieran dar .. Sean BIENVENIDOS !
 
 ## Rutas
 
 - GET: /bancoatlas
+- GET: /bancobbva
 - GET: /cambiosalberdi
 - GET: /cambioschaco
 - GET: /familiar
@@ -20,6 +21,7 @@ Esperamos sea de utilidad para muchos, cualquier ayuda que quieran dar .. Sean B
 ## Donde ?
 
 - http://cotizaciones.cabu.co/bancoatlas
+- http://cotizaciones.cabu.co/bancobbva
 - http://cotizaciones.cabu.co/cambiosalberdi
 - http://cotizaciones.cabu.co/cambioschaco
 - http://cotizaciones.cabu.co/familiar

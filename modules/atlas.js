@@ -4,9 +4,9 @@
     Noviembre del 2015
 */
 
-var request = require('request');
 var cheerio = require('cheerio');
 var Q = require('q');
+var request = require('request');
 
 /* Config */
 var Config = require(__dirname + '/../config/config');
