@@ -18,7 +18,7 @@ module.exports = {
         var optionsRequest = Config.optionsRequest;
         optionsRequest.url = 'https://www.interfisa.com.py/';
         request(optionsRequest, function(error, response, html) {
-            if (!error) {
+            if (!error && response.statusCode == 200) {
                 var $ = cheerio.load(html);
                 Config.parseInterfisa.map(function(moneda) {
                     var compra = $(moneda.compra)[0].children[0].data.trim().replace('.', '').replace(',00', '');

@@ -18,7 +18,7 @@ module.exports = {
         var optionsRequest = Config.optionsRequest;
         optionsRequest.url = 'http://www.bancoatlas.com.py/PERSONA/index.php?idioma=esp';
         request(optionsRequest, function(error, response, html) {
-            if (!error) {
+            if (!error && response.statusCode == 200) {
                 var $ = cheerio.load(html);
                 Config.parseBancoAtlas.map(function(moneda) {
                     var compra = $('ul#monedas > li')[moneda.posicion].children[moneda.compra].data.trim().replace('.','').replace(',00','');

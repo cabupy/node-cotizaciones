@@ -18,7 +18,7 @@ module.exports = {
         var optionsRequest = Config.optionsRequest;
         optionsRequest.url = 'https://www.familiar.com.py/';
         request(optionsRequest, function(error, response, html) {
-            if (!error) {
+            if (!error && response.statusCode == 200) {
                 var $ = cheerio.load(html);
                 Config.parseFamiliar.map(function(moneda) {
                     var compra = $(moneda.clase)[0].next.children[0].data.trim().replace('C:', '').replace('.', '').replace(',00', '');

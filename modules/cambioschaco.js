@@ -18,7 +18,7 @@ module.exports = {
         var optionsRequest = Config.optionsRequest;
         optionsRequest.url = 'http://www.cambioschaco.com.py/php/imprimir_.php';
         request(optionsRequest, function(error, response, html) {
-            if (!error) {
+            if (!error && response.statusCode == 200) {
                 var $ = cheerio.load(html);
                 Config.parseCambiosChaco.map(function(moneda) {
                     var compra = $('tr > td')[moneda.compra].children[0].data.trim().replace('.', '').replace(',00', '');

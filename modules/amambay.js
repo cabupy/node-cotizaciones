@@ -16,13 +16,13 @@ module.exports = {
         var deferred = Q.defer();
         var respuesta = [];
         var optionsRequest = Config.optionsRequest;
-        optionsRequest.url = 'http://www.maxicambios.com.py/';
+        optionsRequest.url = 'http://www.bancoamambay.com.py/';
         request(optionsRequest, function(error, response, html) {
             if (!error && response.statusCode == 200) {
                 var $ = cheerio.load(html);
-                Config.parseMaxiCambios.map(function(moneda) {
-                    var compra = $(moneda.clase)[moneda.posicion].children[moneda.compra].children[0].data.trim().replace('.', '').replace(',00', '');
-                    var venta = $(moneda.clase)[moneda.posicion].children[moneda.venta].children[0].data.trim().replace('.', '').replace(',00', '');
+                Config.parseBancoAmambay.map(function(moneda) {
+                    var compra = $('span.compra')[moneda.posicion].children[0].data.trim().replace('.','').replace(',00','');
+                    var venta = $('span.venta')[moneda.posicion].children[0].data.trim().replace('.','').replace(',00','');
                     respuesta.push({
                         moneda: moneda.moneda,
                         compra: parseInt(compra),
@@ -30,7 +30,7 @@ module.exports = {
                         spread: parseInt(venta) - parseInt(compra)
                     });
                 });
-                console.log('MaxiCambios: \n' + JSON.stringify(respuesta, null, 2));
+                console.log('BancoAmambay: \n' + JSON.stringify( respuesta, null, 2 ) );
                 deferred.resolve(respuesta);
             } else {
                 deferred.reject(respuesta);

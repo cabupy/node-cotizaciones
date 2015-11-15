@@ -18,7 +18,7 @@ module.exports = {
         var optionsRequest = Config.optionsRequest;
         optionsRequest.url = 'http://www.cambiosalberdi.com/';
         request(optionsRequest, function(error, response, html) {
-            if (!error) {
+            if (!error && response.statusCode == 200) {
                 var $ = cheerio.load(html);
                 Config.parseCambiosAlberdi.map(function(moneda) {
                     var compra = $('div[class="monedas_ row-fluid"] > div[class="span2 pagination-right"] > p')[moneda.compra].children[0].data.trim().replace('.', '').replace(',00', '');

@@ -12,7 +12,7 @@ module.exports = {
         headers: {
             "Content-Type": "application/json"
         },
-        timeout: 2500
+        timeout: 5000
     },
     parseMaxiCambios: [{
         moneda: "Dolar",
@@ -32,6 +32,12 @@ module.exports = {
         posicion: 1,
         compra: 7,
         venta: 5
+    }, {
+        moneda: "Euro",
+        clase: '.lineas1',
+        posicion: 2,
+        compra: 7,
+        venta: 5
     }, ],
     parseBancoAtlas: [{
         moneda: "Dolar",
@@ -48,7 +54,25 @@ module.exports = {
         posicion: 2,
         compra: 6,
         venta: 10
+    },  {
+        moneda: "Euro",
+        posicion: 1,
+        compra: 6,
+        venta: 10
     }, ],
+    parseBancoAmambay: [{
+        moneda: "Dolar",
+        posicion: 0
+    }, {
+        moneda: "Peso Argentino",
+        posicion: 3
+    }, {
+        moneda: "Real",
+        posicion: 2
+    }, {
+        moneda: "Euro",
+        posicion: 4
+    },],
     parseCambiosAlberdi: [{
         moneda: "Dolar",
         compra: 0,
@@ -61,6 +85,10 @@ module.exports = {
         moneda: "Real",
         compra: 4,
         venta: 5
+    },  {
+        moneda: "Euro",
+        compra: 6,
+        venta: 7
     }, ],
     parseCambiosChaco: [{
         moneda: "Dolar",
@@ -74,6 +102,10 @@ module.exports = {
         moneda: "Real",
         compra: 16,
         venta: 17
+    }, {
+        moneda: "Euro",
+        compra: 20,
+        venta: 21
     }, ],
     parseFamiliar: [{
         moneda: "Dolar",
@@ -84,6 +116,9 @@ module.exports = {
     }, {
         moneda: "Real",
         clase: 'div#wrapper-banner > div.wrapper > div.sidebar > div#content > div#slider > ul > li > span#real'
+    },  {
+        moneda: "Euro",
+        clase: 'div#wrapper-banner > div.wrapper > div.sidebar > div#content > div#slider > ul > li > span#euro'
     }, ],
     parseInterfisa: [{
         moneda: "Dolar",
@@ -97,5 +132,9 @@ module.exports = {
         moneda: "Real",
         compra: 'td#real_compra',
         venta: 'td#real_venta'
+    },  {
+        moneda: "Euro",
+        compra: 'td#euro_compra',
+        venta: 'td#euro_venta'
     }, ],
 };
