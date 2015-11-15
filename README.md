@@ -1,5 +1,8 @@
 # node-cotizaciones
-Es un api desarrollada en NODE.JS para consumir las web de casas de cambio y entidades financieras, luego hacer el parser correspondiente y convertir eso a JSON para la API REST. Por el momento tenemos de 3 casas de cambio y 5 bancos, vamos a ir incluyendo mas. Esperamos sea de utilidad para muchos, cualquier ayuda que quieran dar .. Sean BIENVENIDOS !
+> **Notas:**
+  - Es una api desarrollada en **NODE.JS** para consumir las web de casas de cambio y entidades financieras, luego hacer el parser correspondiente y convertir eso a JSON para la API REST.
+  - Por el momento tenemos de 3 casas de cambio y 5 bancos, vamos a ir incluyendo mas.
+  - Esperamos sea de utilidad para muchos, cualquier ayuda que quieran dar .. Sean **BIENVENIDOS** !
 
 ## Rutas http, Donde ?
 
@@ -48,7 +51,7 @@ $ node server
 [/cambiosalberdi]: http://cotizaciones.cabu.co/cambiosalberdi
 [/cambioschaco]: http://cotizaciones.cabu.co/cambioschaco
 [/familiar]: http://cotizaciones.cabu.co/familiar
-[/interfisa]: [http://cotizaciones.cabu.co/interfisa
+[/interfisa]: http://cotizaciones.cabu.co/interfisa
 [/maxicambios]: http://cotizaciones.cabu.co/maxicambios
 [/todos]: http://cotizaciones.cabu.co/todos
-[MIT]: https://github.com/cabupy/node-cotizaciones/blob/master/LICENSE
+[mit]: https://github.com/cabupy/node-cotizaciones/blob/master/LICENSE
