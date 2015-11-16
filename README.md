@@ -1,5 +1,5 @@
 # node-cotizaciones
-> **Que es ?**
+> **Que es ?** :neckbeard:
   - Es una api desarrollada en **NODE.JS** para consumir las web de casas de cambio y entidades financieras, luego hacer el parser correspondiente y convertir eso a JSON para la API REST.
   - Por el momento tenemos de 3 casas de cambio y 5 bancos, vamos a ir incluyendo mas.
   - Esperamos sea de utilidad para muchos, cualquier ayuda que quieran dar .. Sean **BIENVENIDOS** !
