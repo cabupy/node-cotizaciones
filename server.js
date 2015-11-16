@@ -10,6 +10,8 @@ var cors = require('cors');
 var express = require('express');
 var request = require('request');
 
+var Q = require('q');
+
 /* Config */
 var Config = require('./config/config');
 
@@ -22,6 +24,8 @@ var CambiosChaco = require('./modules/cambioschaco');
 var Familiar = require('./modules/familiar');
 var Interfisa = require('./modules/interfisa');
 var MaxiCambios = require('./modules/maxicambios');
+/* Hacemos unas funciones genericas para ahorrarnos lineas y ser educados */
+var Generico = require('./modules/generico');
 
 /* /todos */
 var agencias = {
@@ -41,6 +45,7 @@ var app = express();
 /* Habilitamos CORS a todas las rutas */
 app.use(cors());
 
+// Hay que ser educados ...
 app.set('x-powered-by', false);
 
 // Agragamos el header powered-by Vamyal S.A. en un middleware
@@ -49,222 +54,57 @@ app.use(function(req, res, next) {
     next();
 });
 
-/* GET para bancoamambay */
-app.get('/bancoamambay', function(req, res) {
-    agencias.bancoamambay = [];
-    console.time('BancoAmambay.getCotizaciones()');
-    BancoAmambay.getCotizaciones()
-        .then(function(result) {
-            agencias.bancoamambay = result;
-            res.json(result);
-        })
-        .fail(function(error) {
-            res.json(agencias.bancoamambay);
-        })
-        .fin(function() {
-            res.end();
-            console.timeEnd('BancoAmambay.getCotizaciones()');
-        });
-});
+app.get('/bancoamambay', Generico.getGenerico);
+app.get('/bancoatlas', Generico.getGenerico);
+app.get('/bancobbva', Generico.getGenerico);
+app.get('/cambiosalberdi', Generico.getGenerico);
+app.get('/cambioschaco', Generico.getGenerico);
+app.get('/familiar', Generico.getGenerico);
+app.get('/interfisa', Generico.getGenerico);
+app.get('/maxicambios', Generico.getGenerico);
 
-/* GET para bancoatlas */
-app.get('/bancoatlas', function(req, res) {
-    agencias.bancoatlas = [];
-    console.time('BancoAtlas.getCotizaciones()');
-    BancoAtlas.getCotizaciones()
-        .then(function(result) {
-            agencias.bancoatlas = result;
-            res.json(result);
-        })
-        .fail(function(error) {
-            res.json(agencias.bancoatlas);
-        })
-        .fin(function() {
-            res.end();
-            console.timeEnd('BancoAtlas.getCotizaciones()');
-        });
-});
-
-/* GET para bancobbva */
-app.get('/bancobbva', function(req, res) {
-    agencias.bancobbva = [];
-    console.time('BancoBBVA.getCotizaciones()');
-    BancoBBVA.getCotizaciones()
-        .then(function(result) {
-            agencias.bancobbva = result;
-            res.json(result);
-        })
-        .fail(function(error) {
-            res.json(agencias.bancobbva);
-        })
-        .fin(function() {
-            res.end();
-            console.timeEnd('BancoBBVA.getCotizaciones()');
-        });
-});
-
-/* GET para interfisa */
-app.get('/interfisa', function(req, res) {
-    agencias.interfisa = [];
-    console.time('Interfisa.getCotizaciones()');
-    Interfisa.getCotizaciones()
-        .then(function(result) {
-            agencias.interfisa = result;
-            res.json(result);
-        })
-        .fail(function(error) {
-            res.json(agencias.interfisa);
-        })
-        .fin(function() {
-            res.end();
-            console.timeEnd('Interfisa.getCotizaciones()');
-        });
-});
-
-/* GET para familiar */
-app.get('/familiar', function(req, res) {
-    agencias.familiar = [];
-    console.time('Familiar.getCotizaciones()');
-    Familiar.getCotizaciones()
-        .then(function(result) {
-            agencias.familiar = result;
-            res.json(result);
-        })
-        .fail(function(error) {
-            res.json(agencias.familiar);
-        })
-        .fin(function() {
-            res.end();
-            console.timeEnd('Familiar.getCotizaciones()');
-        });
-});
-
-/* GET para maxicambios */
-app.get('/maxicambios', function(req, res) {
-    agencias.maxicambios = [];
-    console.time('MaxiCambios.getCotizaciones()');
-    MaxiCambios.getCotizaciones()
-        .then(function(result) {
-            agencias.maxicambios = result;
-            res.json(result);
-        })
-        .fail(function(error) {
-            res.json(agencias.maxicambios);
-        })
-        .fin(function() {
-            res.end();
-            console.timeEnd('MaxiCambios.getCotizaciones()');
-        });
-});
-
-/* GET para cambioschaco */
-app.get('/cambioschaco', function(req, res) {
-    agencias.cambioschaco = [];
-    console.time('CambiosChaco.getCotizaciones()');
-    CambiosChaco.getCotizaciones()
-        .then(function(result) {
-            agencias.cambioschaco = result;
-            res.json(result);
-        })
-        .fail(function(error) {
-            res.json(agencias.cambioschaco);
-        })
-        .fin(function() {
-            res.end();
-            console.timeEnd('CambiosChaco.getCotizaciones()');
-        });
-});
-
-/* GET para cambiosalberdi */
-app.get('/cambiosalberdi', function(req, res) {
-    agencias.cambiosalberdi = [];
-    console.time('CambiosAlberdi.getCotizaciones()');
-    CambiosAlberdi.getCotizaciones()
-        .then(function(result) {
-            agencias.cambiosalberdi = result;
-            res.json(result);
-        })
-        .fail(function(error) {
-            res.json(agencias.cambiosalberdi);
-        })
-        .fin(function() {
-            res.end();
-            console.timeEnd('CambiosAlberdi.getCotizaciones()');
-        });
-});
-
-/* GET para enviar un JSON con todas las agencias */
 app.get('/todos', function(req, res) {
-    agencias.cambiosalberdi = [];
-    console.time('CambiosAlberdi.getCotizaciones()');
-    CambiosAlberdi.getCotizaciones(function(error, result) {
-        if (!error) agencias.cambiosalberdi = result;
-        console.timeEnd('CambiosAlberdi.getCotizaciones()');
-        agencias.cambioschaco = [];
-        console.time('CambiosChaco.getCotizaciones()');
-        CambiosChaco.getCotizaciones(function(error, result) {
-            if (!error) agencias.cambioschaco = result;
-            console.timeEnd('CambiosChaco.getCotizaciones()');
-            agencias.maxicambios = [];
-            console.time('MaxiCambios.getCotizaciones()');
-            MaxiCambios.getCotizaciones(function(error, result) {
-                if (!error) agencias.maxicambios = result;
-                console.timeEnd('MaxiCambios.getCotizaciones()');
-                agencias.bancoatlas = [];
-                console.time('BancoAtlas.getCotizaciones()');
-                BancoAtlas.getCotizaciones(function(error, result) {
-                    if (!error) agencias.bancoatlas = result;
-                    console.timeEnd('BancoAtlas.getCotizaciones()');
-                    agencias.interfisa = [];
-                    console.time('Interfisa.getCotizaciones()');
-                    Interfisa.getCotizaciones(function(error, result) {
-                        if (!error) agencias.interfisa = result;
-                        console.timeEnd('Interfisa.getCotizaciones()');
-                        agencias.familiar = [];
-                        console.time('Familiar.getCotizaciones()');
-                        Familiar.getCotizaciones(function(error, result) {
-                            if (!error) agencias.familiar = result;
-                            console.timeEnd('Familiar.getCotizaciones()');
-                            agencias.bancobbva = [];
-                            console.time('BancoBBVA.getCotizaciones()');
-                            BancoBBVA.getCotizaciones(function(error, result) {
-                                if (!error) agencias.bancobbva = result;
-                                console.timeEnd('BancoBBVA.getCotizaciones()');
-                                agencias.bancoamambay = [];
-                                console.time('BancoAmambay.getCotizaciones()');
-                                BancoAmambay.getCotizaciones(function(error, result) {
-                                    if (!error) agencias.bancoamambay = result;
-                                    console.timeEnd('BancoAmambay.getCotizaciones()');
-                                    /* Devolvemos lo que corresponda */
-                                    res.json(agencias);
-                                }); //BancoAmambay
-                            }); //BancoBBVA
-                        }); //Familiar
-                    }); //Interfisa
-                }); //BancoAtlas
-            }); //MaxiCambios
-        }); // CambiosChaco
-    }); // CambiosAlberdi
+
+    var promises = [
+        BancoAmambay.getCotizaciones(),
+        BancoAtlas.getCotizaciones(),
+        BancoBBVA.getCotizaciones(),
+        CambiosAlberdi.getCotizaciones(),
+        CambiosChaco.getCotizaciones(),
+        Familiar.getCotizaciones(),
+        Interfisa.getCotizaciones(),
+        MaxiCambios.getCotizaciones(),
+    ];
+
+    Q.allSettled(promises).spread(function(
+        BancoAmambay, BancoAtlas, BancoBBVA, CambiosAlberdi, CambiosChaco, Familiar, Interfisa, MaxiCambios
+    ) {
+
+        agencias.bancoamambay = (BancoAmambay.state === "fulfilled") ? BancoAmambay.value : [];
+        agencias.bancoatlas = (BancoAtlas.state === "fulfilled") ? BancoAtlas.value : [];
+        agencias.bancobbva = (BancoBBVA.state === "fulfilled") ? BancoBBVA.value : [];
+        agencias.cambiosalberdi = (CambiosAlberdi.state === "fulfilled") ? CambiosAlberdi.value : [];
+        agencias.cambioschaco = (CambiosChaco.state === "fulfilled") ? CambiosChaco.value : [];
+        agencias.familiar = (Familiar.state === "fulfilled") ? Familiar.value : [];
+        agencias.interfisa = (Interfisa.state === "fulfilled") ? Interfisa.value : [];
+        agencias.maxicambios = (MaxiCambios.state === "fulfilled") ? MaxiCambios.value : [];
+
+        res.json(agencias);
+        res.end();
+
+    }).done();
+
 }); // get /todos
 
-app.get('*', function(req, res) {
-    var fecha = new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '');
-    var datos = {
-        api: 'API de VAMYAL S.A.',
-        fechaUTC: fecha
-    };
-    res.json(datos);
-});
+app.get('*', Generico.getGenerico);
 
 var ip = process.env.IP || Config.ip;
 var port = process.env.PORT || Config.port;
 
+console.time('Arrancamos el server en');
 var server = app.listen(port, ip, function() {
-
-    var host = server.address().address;
-    var port = server.address().port;
-    console.log('Cotizaciones API en http://%s:%s', host, port);
-
+    console.log('Cotizaciones API en http://%s:%s', server.address().address, server.address().port);
+    console.timeEnd('Arrancamos el server en');
 });
 
 exports = module.exports = app;
