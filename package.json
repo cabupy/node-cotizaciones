@@ -1,13 +1,23 @@
 {
   "name": "node-cotizaciones",
-  "version": "1.0.0",
+  "version": "1.2.0",
   "description": "Buscamos las cotizaciones en la web.",
   "main": "server.js",
-  "author": "Vamyal S.A.",
+  "scripts": {
+    "start": "node ./server.js"
+  },
+  "author": "Vamyal S.A. - Ing. Carlos Vallejos",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cabupy/node-cotizaciones.git"
+  },
   "dependencies": {
     "cheerio": "latest",
     "cors": "^2.7.1",
+    "cron": "^1.0.9",
     "express": "latest",
+    "mongoose": "^4.2.6",
     "q": "^1.4.1",
     "request": "latest"
   }

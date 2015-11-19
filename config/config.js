@@ -5,6 +5,9 @@
 */
 
 module.exports = {
+    getNow: function() {
+        return Date.now();
+    },
     ip: 'localhost',
     port: 3050,
     optionsRequest: {
@@ -12,7 +15,7 @@ module.exports = {
         headers: {
             "Content-Type": "application/json"
         },
-        timeout: 5000
+        timeout: 10000
     },
     parseMaxiCambios: [{
         moneda: "Dolar",
@@ -54,7 +57,7 @@ module.exports = {
         posicion: 2,
         compra: 6,
         venta: 10
-    },  {
+    }, {
         moneda: "Euro",
         posicion: 1,
         compra: 6,
@@ -72,7 +75,7 @@ module.exports = {
     }, {
         moneda: "Euro",
         posicion: 4
-    },],
+    }, ],
     parseCambiosAlberdi: [{
         moneda: "Dolar",
         compra: 0,
@@ -85,7 +88,7 @@ module.exports = {
         moneda: "Real",
         compra: 4,
         venta: 5
-    },  {
+    }, {
         moneda: "Euro",
         compra: 6,
         venta: 7
@@ -116,7 +119,7 @@ module.exports = {
     }, {
         moneda: "Real",
         clase: 'div#wrapper-banner > div.wrapper > div.sidebar > div#content > div#slider > ul > li > span#real'
-    },  {
+    }, {
         moneda: "Euro",
         clase: 'div#wrapper-banner > div.wrapper > div.sidebar > div#content > div#slider > ul > li > span#euro'
     }, ],
@@ -132,7 +135,7 @@ module.exports = {
         moneda: "Real",
         compra: 'td#real_compra',
         venta: 'td#real_venta'
-    },  {
+    }, {
         moneda: "Euro",
         compra: 'td#euro_compra',
         venta: 'td#euro_venta'

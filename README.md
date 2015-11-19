@@ -35,7 +35,9 @@ $ npm install
 ## Dependencias
 - cheerio
 - cors
+- cron
 - express
+- mongoose
 - q
 - request
 
@@ -45,9 +47,10 @@ $ npm install
 $ node server
 ```
 
-## Pendientes
-- Agregar una BD MongoDB o PostgreSQL para almacenar un historico.
-- Incluir una interfaz Web y una App Hibrida (Ionic Framwork)
+## ToDo
+- [x] Agregar una BD MongoDB para almacenar un historico.
+- [x] Desarrollar una interfaz Web
+- [ ] Desarrollar una App Hibrida (Ionic Framwork)
 
 ## Licencia
 [MIT]

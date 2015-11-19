@@ -16,28 +16,15 @@ var Q = require('q');
 var Config = require('./config/config');
 
 /* Modulos */
-var BancoAmambay = require('./modules/amambay');
+/*var BancoAmambay = require('./modules/amambay');
 var BancoAtlas = require('./modules/atlas');
 var BancoBBVA = require('./modules/bbva');
 var CambiosAlberdi = require('./modules/cambiosalberdi');
 var CambiosChaco = require('./modules/cambioschaco');
 var Familiar = require('./modules/familiar');
 var Interfisa = require('./modules/interfisa');
-var MaxiCambios = require('./modules/maxicambios');
-/* Hacemos unas funciones genericas para ahorrarnos lineas y ser educados */
+var MaxiCambios = require('./modules/maxicambios');*/
 var Generico = require('./modules/generico');
-
-/* /todos */
-var agencias = {
-    bancoamambay: [],
-    bancoatlas: [],
-    bancobbva: [],
-    cambiosalberdi: [],
-    cambioschaco: [],
-    familiar: [],
-    interfisa: [],
-    maxicambios: []
-};
 
 /* Instanciamos una app express */
 var app = express();
@@ -45,9 +32,7 @@ var app = express();
 /* Habilitamos CORS a todas las rutas */
 app.use(cors());
 
-// Hay que ser educados ...
 app.set('x-powered-by', false);
-
 // Agragamos el header powered-by Vamyal S.A. en un middleware
 app.use(function(req, res, next) {
     res.header('X-Powered-By', 'Vamyal S.A. <vamyal.com>');
@@ -65,31 +50,72 @@ app.get('/maxicambios', Generico.getGenerico);
 
 app.get('/todos', function(req, res) {
 
+    var retorno = [];
+
     var promises = [
-        BancoAmambay.getCotizaciones(),
-        BancoAtlas.getCotizaciones(),
-        BancoBBVA.getCotizaciones(),
-        CambiosAlberdi.getCotizaciones(),
-        CambiosChaco.getCotizaciones(),
-        Familiar.getCotizaciones(),
-        Interfisa.getCotizaciones(),
-        MaxiCambios.getCotizaciones(),
+        Generico.getCotizacionesDB(1,'BancoAmambay'),
+        Generico.getCotizacionesDB(2,'BancoAtlas'),
+        Generico.getCotizacionesDB(3,'BancoBBVA'),
+        Generico.getCotizacionesDB(4,'CambiosAlberdi'),
+        Generico.getCotizacionesDB(5,'CambiosChaco'),
+        Generico.getCotizacionesDB(6,'Familiar'),
+        Generico.getCotizacionesDB(7,'Interfisa'),
+        Generico.getCotizacionesDB(8,'MaxiCambios'),
     ];
 
     Q.allSettled(promises).spread(function(
         BancoAmambay, BancoAtlas, BancoBBVA, CambiosAlberdi, CambiosChaco, Familiar, Interfisa, MaxiCambios
     ) {
 
-        agencias.bancoamambay = (BancoAmambay.state === "fulfilled") ? BancoAmambay.value : [];
-        agencias.bancoatlas = (BancoAtlas.state === "fulfilled") ? BancoAtlas.value : [];
-        agencias.bancobbva = (BancoBBVA.state === "fulfilled") ? BancoBBVA.value : [];
-        agencias.cambiosalberdi = (CambiosAlberdi.state === "fulfilled") ? CambiosAlberdi.value : [];
-        agencias.cambioschaco = (CambiosChaco.state === "fulfilled") ? CambiosChaco.value : [];
-        agencias.familiar = (Familiar.state === "fulfilled") ? Familiar.value : [];
-        agencias.interfisa = (Interfisa.state === "fulfilled") ? Interfisa.value : [];
-        agencias.maxicambios = (MaxiCambios.state === "fulfilled") ? MaxiCambios.value : [];
+        retorno.push({
+            id: 1,
+            entidad: 'Banco Amambay',
+            datos: (BancoAmambay.state === "fulfilled") ? BancoAmambay.value : []
+        });
 
-        res.json(agencias);
+        retorno.push({
+            id: 2,
+            entidad: 'Banco Atlas',
+            datos: (BancoAtlas.state === "fulfilled") ? BancoAtlas.value : []
+        });
+
+        retorno.push({
+            id: 3,
+            entidad: 'Banco BBVA',
+            datos: (BancoBBVA.state === "fulfilled") ? BancoBBVA.value : []
+        });
+
+        retorno.push({
+            id: 4,
+            entidad: 'Cambios Alberdi',
+            datos: (CambiosAlberdi.state === "fulfilled") ? CambiosAlberdi.value : []
+        });
+
+        retorno.push({
+            id: 5,
+            entidad: 'Cambios Chaco',
+            datos: (CambiosChaco.state === "fulfilled") ? CambiosChaco.value : []
+        });
+
+        retorno.push({
+            id: 6,
+            entidad: 'Banco Familiar',
+            datos: (Familiar.state === "fulfilled") ? Familiar.value : []
+        });
+
+        retorno.push({
+            id: 7,
+            entidad: 'Interfisa Banco',
+            datos: (Interfisa.state === "fulfilled") ? Interfisa.value : []
+        });
+
+        retorno.push({
+            id: 8,
+            entidad: 'Maxicambios',
+            datos: (MaxiCambios.state === "fulfilled") ? MaxiCambios.value : []
+        });
+
+        res.json(retorno);
         res.end();
 
     }).done();

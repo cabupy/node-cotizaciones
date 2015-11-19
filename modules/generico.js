@@ -4,7 +4,10 @@
     Noviembre del 2015
 */
 
+var mongoose = require('mongoose');
 var Q = require('q');
+
+var Cotizaciones = require(__dirname + '/../models/cotizaciones.model');
 
 /* Modulos */
 var BancoAmambay = require('./amambay');
@@ -22,11 +25,42 @@ var self = module.exports = {
         return new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '');
     },
 
-    getCotizaciones: function(modulo, nombre, callback) {
+    getCotizacionesDB: function(id, nombre, callback) {
 
         var deferred = Q.defer();
-        console.time(nombre + '.getCotizaciones()');
-        modulo.getCotizaciones()
+        var respuesta = [];
+        console.time(nombre + '.getCotizacionesDB()');
+        Cotizaciones.find({ id : id }, {
+                _id: 0,
+                id: 1,
+                entidad: 1,
+                moneda: 1,
+                compra:1,
+                venta: 1,
+                spread:1,
+                fecha: 1
+            }).sort({
+                fecha: -1, moneda:1
+            }).limit( id==3 ? 2 : 4 ) // *bbva solo cotiza dolar y euro
+            .then(function(result) {
+                //console.log(result);
+                deferred.resolve(result);
+                console.timeEnd(nombre + '.getCotizacionesDB()');
+            })
+            .then(undefined,function(error) {
+                deferred.reject(error);
+                console.timeEnd(nombre + '.getCotizacionesDB()');
+            });
+
+        deferred.promise.nodeify(callback);
+        return deferred.promise;
+    },
+
+    getCotizacionesHTML: function(modulo, nombre, callback) {
+
+        var deferred = Q.defer();
+        console.time(nombre + '.getCotizacionesHTML()');
+        modulo.getCotizacionesHTML()
             .then(function(result) {
                 deferred.resolve(result);
             })
@@ -34,7 +68,7 @@ var self = module.exports = {
                 deferred.reject(error);
             })
             .fin(function() {
-                console.timeEnd(nombre + '.getCotizaciones()');
+                console.timeEnd(nombre + '.getCotizacionesHTML()');
             });
         deferred.promise.nodeify(callback);
         return deferred.promise;
@@ -45,7 +79,7 @@ var self = module.exports = {
 
         switch (req.path) {
             case '/bancoamambay':
-                self.getCotizaciones(BancoAmambay, 'BancoAmambay')
+                self.getCotizacionesDB(1, 'BancoAmambay')
                     .then(function(result) {
                         res.json(result);
                     })
@@ -57,7 +91,7 @@ var self = module.exports = {
                     });
                 break;
                 case '/bancoatlas':
-                    self.getCotizaciones(BancoAtlas, 'BancoAtlas')
+                    self.getCotizacionesDB(2, 'BancoAtlas')
                         .then(function(result) {
                             res.json(result);
                         })
@@ -69,7 +103,7 @@ var self = module.exports = {
                         });
                     break;
                 case '/bancobbva':
-                    self.getCotizaciones(BancoBBVA, 'BancoBBVA')
+                    self.getCotizacionesDB(3, 'BancoBBVA')
                         .then(function(result) {
                             res.json(result);
                         })
@@ -81,7 +115,7 @@ var self = module.exports = {
                         });
                     break;
                 case '/cambiosalberdi':
-                    self.getCotizaciones(CambiosAlberdi, 'CambiosAlberdi')
+                    self.getCotizacionesDB(4, 'CambiosAlberdi')
                         .then(function(result) {
                             res.json(result);
                         })
@@ -93,7 +127,7 @@ var self = module.exports = {
                         });
                     break;
                 case '/cambioschaco':
-                    self.getCotizaciones(CambiosChaco, 'CambiosChaco')
+                    self.getCotizacionesDB(5, 'CambiosChaco')
                         .then(function(result) {
                             res.json(result);
                         })
@@ -105,7 +139,7 @@ var self = module.exports = {
                         });
                     break;
                 case '/familiar':
-                    self.getCotizaciones(Familiar, 'Familiar')
+                    self.getCotizacionesDB(6, 'Familiar')
                         .then(function(result) {
                             res.json(result);
                         })
@@ -117,7 +151,7 @@ var self = module.exports = {
                         });
                     break;
                 case '/interfisa':
-                    self.getCotizaciones(Interfisa, 'Interfisa')
+                    self.getCotizacionesDB(7, 'Interfisa')
                         .then(function(result) {
                             res.json(result);
                         })
@@ -129,7 +163,7 @@ var self = module.exports = {
                         });
                     break;
                 case '/maxicambios':
-                    self.getCotizaciones(MaxiCambios, 'MaxiCambios')
+                    self.getCotizacionesDB(8, 'MaxiCambios')
                         .then(function(result) {
                             res.json(result);
                         })
