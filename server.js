@@ -122,7 +122,7 @@ app.get('/todos', function(req, res) {
 
 }); // get /todos
 
-app.get('*', Generico.getGenerico);
+app.get('/quien', Generico.getGenerico);
 
 var ip = process.env.IP || Config.ip;
 var port = process.env.PORT || Config.port;

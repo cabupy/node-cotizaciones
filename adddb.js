@@ -22,9 +22,17 @@ var Generico = require('./modules/generico');
 mongoose.connection.once('connected', function() {
     console.log("Conectados a la base de datos.");
     //recorrerEntidades();
+    //ctrlDifCambio();
     /* Lunes a Viernes desde las 8:00 cada 1/2 hora hasta las 17:30 */
-    new CronJob('00 00,30 8,9,10,11,12,13,14,15,16,17 * * 1-5', recorrerEntidades, null, true, "America/Asuncion");
+    //new CronJob('00 00,30 8,9,10,11,12,13,14,15,16,17 * * 1-5', recorrerEntidades, null, true, "America/Asuncion");
+    //new CronJob('10 00,30 8,9,10,11,12,13,14,15,16,17 * * 1-5', ctrlDifCambio, null, true, "America/Asuncion");
 });
+
+var ctrlDifCambio = function(){
+    Generico.recorrido.map(function(value, index) {
+        Generico.updateDifCambio(value.id, value.moneda);
+    });
+};
 
 var recorrerEntidades = function() {
 

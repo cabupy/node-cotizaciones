@@ -23,15 +23,28 @@ var cotizacionesSchema = new Schema({
     },
     compra: {
         type: Number,
-        required: true
+        required: true,
+        default: 0
     },
     venta: {
         type: Number,
-        required: true
+        required: true,
+        default: 0
     },
     spread: {
         type: Number,
-        required: true
+        required: true,
+        default: 0
+    },
+    difcompra: {
+        type: Number,
+        required: true,
+        default: 0
+    },
+    difventa: {
+        type: Number,
+        required: true,
+        default: 0
     },
     fecha: {
         type: Date,
