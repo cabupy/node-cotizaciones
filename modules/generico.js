@@ -25,9 +25,14 @@ var self = module.exports = {
         return new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '');
     },
 
+    /**
+     * @name getHoy
+     * @desc Devuelve la fecha de hoy con hhmmss = 000000
+     * @returns {Date}
+     */
     getHoy: function() {
         var hoy = new Date(Date.now());
-        var fecha = new Date(hoy.getFullYear(), hoy.getMonth(),hoy.getDate());
+        var fecha = new Date(hoy.getFullYear(), hoy.getMonth(), hoy.getDate());
         return fecha;
     },
 
@@ -309,7 +314,7 @@ var self = module.exports = {
 
     },
 
-    recorrido : [{
+    recorrido: [{
         id: 1,
         moneda: 'Dolar',
     }, {
