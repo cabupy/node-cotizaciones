@@ -42,7 +42,16 @@ var self = module.exports = {
             }).sort({
                 fecha: -1, moneda:1
             }).limit( id==3 ? 2 : 4 ) // *bbva solo cotiza dolar y euro
-            .then(function(result) {
+            .exec(function(error, result) {
+                //console.log(result);
+                if (!error) {
+                        deferred.resolve(result);
+                } else {
+                        deferred.reject(respuesta);
+                }
+                console.timeEnd(nombre + '.getCotizacionesDB()');
+            });
+            /*.then(function(result) {
                 //console.log(result);
                 deferred.resolve(result);
                 console.timeEnd(nombre + '.getCotizacionesDB()');
@@ -50,7 +59,7 @@ var self = module.exports = {
             .then(undefined,function(error) {
                 deferred.reject(error);
                 console.timeEnd(nombre + '.getCotizacionesDB()');
-            });
+            });*/
 
         deferred.promise.nodeify(callback);
         return deferred.promise;
