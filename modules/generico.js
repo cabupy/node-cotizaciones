@@ -99,7 +99,7 @@ var self = module.exports = {
 
                     result.map(function(value, index) {
 
-                        findCotizacionPrevia(value.id, value.moneda, value.fecha)
+                        self.findCotizacionPrevia(value.id, value.moneda, value.fecha)
                             .then(function(result) {
 
                                 if (result.length > 0) {
