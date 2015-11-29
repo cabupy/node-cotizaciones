@@ -7,10 +7,10 @@
 /* librerias requeridas */
 var cheerio = require('cheerio');
 var cors = require('cors');
+var db = require('./models/db');
 var express = require('express');
-var request = require('request');
-
 var Q = require('q');
+var request = require('request');
 
 /* Config */
 var Config = require('./config/config');

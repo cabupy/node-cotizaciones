@@ -5,10 +5,8 @@
 */
 
 var mongoose = require('mongoose');
-var db = mongoose.connect('mongodb://localhost/finanzas');
-var Schema = mongoose.Schema;
 
-var cotizacionesSchema = new Schema({
+var cotizacionesSchema = new mongoose.Schema({
     id: {
         type: Number,
         required: true
@@ -53,6 +51,4 @@ var cotizacionesSchema = new Schema({
     },
 });
 
-var Cotizaciones = db.model('Cotizaciones', cotizacionesSchema);
-
-module.exports = Cotizaciones;
+var Cotizaciones = module.exports = mongoose.model('Cotizaciones', cotizacionesSchema);

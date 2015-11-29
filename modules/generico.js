@@ -21,6 +21,11 @@ var MaxiCambios = require('./maxicambios');
 
 var self = module.exports = {
 
+    /**
+     * @name getUTC
+     * @desc Devuelve la fecha de hoy UTC
+     * @returns {Date}
+     */
     getUTC: function() {
         return new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '');
     },
@@ -42,20 +47,8 @@ var self = module.exports = {
         var respuesta = [];
         //console.time('findCotizacionPrevia()');
         Cotizaciones
-            .find({
-                id: id,
-                moneda: moneda,
-                fecha: {
-                    $lt: fecha
-                }
-            }, {
-                _id: 0,
-                compra: 1,
-                venta: 1,
-            })
-            .sort({
-                fecha: -1
-            })
+            .find({ id: id, moneda: moneda, fecha: { $lt: fecha } }, { _id: 0, compra: 1, venta: 1, })
+            .sort({ fecha: -1 })
             .limit(1)
             .exec(function(error, result) {
                 //console.log(result);
@@ -81,16 +74,8 @@ var self = module.exports = {
         var difventa = 0;
         console.time('updateDifCambio(' + id + ', ' + moneda + ')');
         Cotizaciones
-            .find({
-                id: id,
-                moneda: moneda,
-                fecha: {
-                    $gte: self.getHoy()
-                },
-            }, {})
-            .sort({
-                fecha: -1
-            })
+            .find({ id: id, moneda: moneda, fecha: { $gte: self.getHoy() }, }, {})
+            .sort({ fecha: -1 })
             .limit(0)
             .exec(function(error, result) {
 
@@ -154,23 +139,10 @@ var self = module.exports = {
         var deferred = Q.defer();
         var respuesta = [];
         console.time(nombre + '.getCotizacionesDB()');
-        Cotizaciones.find({
-                id: id
-            }, {
-                _id: 0,
-                id: 1,
-                entidad: 1,
-                moneda: 1,
-                compra: 1,
-                venta: 1,
-                spread: 1,
-                difcompra: 1,
-                difventa: 1,
-                fecha: 1
-            }).sort({
-                fecha: -1,
-                moneda: 1
-            }).limit(id == 3 ? 2 : 4) // *bbva solo cotiza dolar y euro
+        Cotizaciones
+            .find({ id: id }, { _id: 0, id: 1, entidad: 1, moneda: 1, compra: 1, venta: 1, spread: 1, difcompra: 1, difventa: 1, fecha: 1 })
+            .sort({ fecha: -1, moneda: 1 })
+            .limit(id == 3 ? 2 : 4) // *bbva solo cotiza dolar y euro
             .exec(function(error, result) {
                 //console.log(result);
                 if (!error) {
@@ -206,102 +178,43 @@ var self = module.exports = {
 
     getGenerico: function(req, res) {
 
+        // Nos ahorramos algunas lineas de codigo
+        var getCotizacionesDBlocal = function(id, banco){
+            self.getCotizacionesDB(id, banco)
+                .then(function(result) {
+                    res.json(result);
+                })
+                .fail(function(error) {
+                    res.json(error);
+                })
+                .fin(function() {
+                    res.end();
+                });
+        };
+
         switch (req.path) {
             case '/bancoamambay':
-                self.getCotizacionesDB(1, 'BancoAmambay')
-                    .then(function(result) {
-                        res.json(result);
-                    })
-                    .fail(function(error) {
-                        res.json(error);
-                    })
-                    .fin(function() {
-                        res.end();
-                    });
+                getCotizacionesDBlocal(1, 'bancoamambay');
                 break;
             case '/bancoatlas':
-                self.getCotizacionesDB(2, 'BancoAtlas')
-                    .then(function(result) {
-                        res.json(result);
-                    })
-                    .fail(function(error) {
-                        res.json(error);
-                    })
-                    .fin(function() {
-                        res.end();
-                    });
+                getCotizacionesDBlocal(2, 'BancoAtlas');
                 break;
             case '/bancobbva':
-                self.getCotizacionesDB(3, 'BancoBBVA')
-                    .then(function(result) {
-                        res.json(result);
-                    })
-                    .fail(function(error) {
-                        res.json(error);
-                    })
-                    .fin(function() {
-                        res.end();
-                    });
+                getCotizacionesDBlocal(3, 'BancoBBVA');
                 break;
             case '/cambiosalberdi':
-                self.getCotizacionesDB(4, 'CambiosAlberdi')
-                    .then(function(result) {
-                        res.json(result);
-                    })
-                    .fail(function(error) {
-                        res.json(error);
-                    })
-                    .fin(function() {
-                        res.end();
-                    });
+                getCotizacionesDBlocal(4, 'CambiosAlberdi');
                 break;
             case '/cambioschaco':
-                self.getCotizacionesDB(5, 'CambiosChaco')
-                    .then(function(result) {
-                        res.json(result);
-                    })
-                    .fail(function(error) {
-                        res.json(error);
-                    })
-                    .fin(function() {
-                        res.end();
-                    });
+                getCotizacionesDBlocal(5, 'CambiosChaco');
                 break;
             case '/familiar':
-                self.getCotizacionesDB(6, 'Familiar')
-                    .then(function(result) {
-                        res.json(result);
-                    })
-                    .fail(function(error) {
-                        res.json(error);
-                    })
-                    .fin(function() {
-                        res.end();
-                    });
+                getCotizacionesDBlocal(6, 'Familiar');
                 break;
             case '/interfisa':
-                self.getCotizacionesDB(7, 'Interfisa')
-                    .then(function(result) {
-                        res.json(result);
-                    })
-                    .fail(function(error) {
-                        res.json(error);
-                    })
-                    .fin(function() {
-                        res.end();
-                    });
                 break;
             case '/maxicambios':
-                self.getCotizacionesDB(8, 'MaxiCambios')
-                    .then(function(result) {
-                        res.json(result);
-                    })
-                    .fail(function(error) {
-                        res.json(error);
-                    })
-                    .fin(function() {
-                        res.end();
-                    });
+                getCotizacionesDBlocal(8, 'MaxiCambios');
                 break;
             default:
                 var datos = {

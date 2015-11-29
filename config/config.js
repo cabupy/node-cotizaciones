@@ -10,6 +10,7 @@ module.exports = {
     },
     ip: 'localhost',
     port: 3050,
+    dbURI: 'mongodb://localhost/finanzas',
     optionsRequest: {
         rejectUnauthorized: false,
         headers: {

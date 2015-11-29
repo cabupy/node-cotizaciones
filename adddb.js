@@ -7,6 +7,7 @@
 var mongoose = require('mongoose');
 var CronJob = require('cron').CronJob;
 
+var db = require('./models/db');
 var Cotizaciones = require('./models/cotizaciones.model');
 
 var BancoAmambay = require('./modules/amambay');
@@ -36,148 +37,35 @@ var ctrlDifCambio = function(){
 
 var recorrerEntidades = function() {
 
-    console.time('Guardamos Banco Amambay en');
-    Generico.getCotizacionesHTML(BancoAmambay, 'BancoAmambay')
-        .then(function(result) {
-            result.map(function(value) {
-                var cotizacion = new Cotizaciones(value);
-                cotizacion.save(function(err) {
-                    if (err) throw err;
-                    //console.log('Cotizaciones guardada satisfactoriamente!');
-                });
-            });
-        })
-        .fail(function(error) {
-            console.log('Banco Amambay volvio vacio: ', error);
-        })
-        .fin(function() {
-            console.timeEnd('Guardamos Banco Amambay en');
-        });
+    var getCotizacionesHTMLlocal = function(modulo, nombre){
 
-    console.time('Guardamos Banco Atlas en');
-    Generico.getCotizacionesHTML(BancoAtlas, 'BancoAtlas')
-        .then(function(result) {
-            result.map(function(value) {
-                var cotizacion = new Cotizaciones(value);
-                cotizacion.save(function(err) {
-                    if (err) throw err;
-                    //console.log('Cotizaciones guardada satisfactoriamente!');
+        console.time('Guardamos '+ nombre +' en');
+        Generico.getCotizacionesHTML(modulo, nombre)
+            .then(function(result) {
+                result.map(function(value) {
+                    var cotizacion = new Cotizaciones(value);
+                    cotizacion.save(function(err) {
+                        if (err) throw err;
+                        //console.log('Cotizaciones guardada satisfactoriamente!');
+                    });
                 });
+            })
+            .fail(function(error) {
+                console.log(nombre + ' volvio vacio: ', error);
+            })
+            .fin(function() {
+                console.timeEnd('Guardamos '+ nombre +' en');
             });
-        })
-        .fail(function(error) {
-            console.log('Banco Atlas volvio vacio: ', error);
-        })
-        .fin(function() {
-            console.timeEnd('Guardamos Banco Atlas en');
-        });
 
-    console.time('Guardamos Banco BBVA en');
-    Generico.getCotizacionesHTML(BancoBBVA, 'BancoBBVA')
-        .then(function(result) {
-            result.map(function(value) {
-                var cotizacion = new Cotizaciones(value);
-                cotizacion.save(function(err) {
-                    if (err) throw err;
-                    //console.log('Cotizaciones guardada satisfactoriamente!');
-                });
-            });
-        })
-        .fail(function(error) {
-            console.log('Banco BBVA volvio vacio: ', error);
-        })
-        .fin(function() {
-            console.timeEnd('Guardamos Banco BBVA en');
-        });
+    };
 
-    console.time('Guardamos Cambios Alberdi en');
-    Generico.getCotizacionesHTML(CambiosAlberdi, 'CambiosAlberdi')
-        .then(function(result) {
-            result.map(function(value) {
-                var cotizacion = new Cotizaciones(value);
-                cotizacion.save(function(err) {
-                    if (err) throw err;
-                    //console.log('Cotizaciones guardada satisfactoriamente!');
-                });
-            });
-        })
-        .fail(function(error) {
-            console.log('Cambios Alberdi volvio vacio: ', error);
-        })
-        .fin(function() {
-            console.timeEnd('Guardamos Cambios Alberdi en');
-        });
-
-    console.time('Guardamos Cambios Chaco en');
-    Generico.getCotizacionesHTML(CambiosChaco, 'CambiosChaco')
-        .then(function(result) {
-            result.map(function(value) {
-                var cotizacion = new Cotizaciones(value);
-                cotizacion.save(function(err) {
-                    if (err) throw err;
-                    //console.log('Cotizaciones guardada satisfactoriamente!');
-                });
-            });
-        })
-        .fail(function(error) {
-            console.log('Cambios Chaco volvio vacio: ', error);
-        })
-        .fin(function() {
-            console.timeEnd('Guardamos Cambios Chaco en');
-        });
-
-    console.time('Guardamos Interfisa Banco en');
-    Generico.getCotizacionesHTML(Interfisa, 'Interfisa')
-        .then(function(result) {
-            result.map(function(value) {
-                var cotizacion = new Cotizaciones(value);
-                cotizacion.save(function(err) {
-                    if (err) throw err;
-                    //console.log('Cotizaciones guardada satisfactoriamente!');
-                });
-            });
-        })
-        .fail(function(error) {
-            console.log('Interfisa Banco volvio vacio: ', error);
-        })
-        .fin(function() {
-            console.timeEnd('Guardamos Interfisa Banco en');
-        });
-
-    console.time('Guardamos Banco Familiar en');
-    Generico.getCotizacionesHTML(Familiar, 'Familiar')
-        .then(function(result) {
-            result.map(function(value) {
-                var cotizacion = new Cotizaciones(value);
-                cotizacion.save(function(err) {
-                    if (err) throw err;
-                    //console.log('Cotizaciones guardada satisfactoriamente!');
-                });
-            });
-        })
-        .fail(function(error) {
-            console.log('Banco Familiar volvio vacio: ', error);
-        })
-        .fin(function() {
-            console.timeEnd('Guardamos Banco Familiar en');
-        });
-
-    console.time('Guardamos MaxiCambios en');
-    Generico.getCotizacionesHTML(MaxiCambios, 'MaxiCambios')
-        .then(function(result) {
-            result.map(function(value) {
-                var cotizacion = new Cotizaciones(value);
-                cotizacion.save(function(err) {
-                    if (err) throw err;
-                    //console.log('Cotizaciones guardada satisfactoriamente!');
-                });
-            });
-        })
-        .fail(function(error) {
-            console.log('MaxiCambios volvio vacio: ', error);
-        })
-        .fin(function() {
-            console.timeEnd('Guardamos MaxiCambios en');
-        });
+    getCotizacionesHTMLlocal(BancoAmambay, 'BancoAmambay');
+    getCotizacionesHTMLlocal(BancoAtlas, 'BancoAtlas');
+    getCotizacionesHTMLlocal(BancoBBVA, 'BancoBBVA');
+    getCotizacionesHTMLlocal(CambiosAlberdi, 'CambiosAlberdi');
+    getCotizacionesHTMLlocal(CambiosChaco, 'CambiosChaco');
+    getCotizacionesHTMLlocal(Interfisa, 'Interfisa');
+    getCotizacionesHTMLlocal(Familiar, 'Familiar');
+    getCotizacionesHTMLlocal(MaxiCambios, 'MaxiCambios');
 
 };
