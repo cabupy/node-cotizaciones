@@ -194,7 +194,7 @@ var self = module.exports = {
 
         switch (req.path) {
             case '/bancoamambay':
-                getCotizacionesDBlocal(1, 'bancoamambay');
+                getCotizacionesDBlocal(1, 'BancoAmambay');
                 break;
             case '/bancoatlas':
                 getCotizacionesDBlocal(2, 'BancoAtlas');
@@ -212,6 +212,7 @@ var self = module.exports = {
                 getCotizacionesDBlocal(6, 'Familiar');
                 break;
             case '/interfisa':
+                getCotizacionesDBlocal(7, 'Interfisa');
                 break;
             case '/maxicambios':
                 getCotizacionesDBlocal(8, 'MaxiCambios');
