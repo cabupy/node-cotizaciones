@@ -38,6 +38,7 @@ $ npm install
 - cron
 - express
 - mongoose
+- morgan
 - q
 - request
 
@@ -51,6 +52,10 @@ $ node server
 - [x] Agregar una BD MongoDB para almacenar un historico.
 - [x] Desarrollar una interfaz Web
 - [ ] Desarrollar una App Hibrida (Ionic Framwork)
+
+## El sitio web para ver las cotizaciones.
+
+[cotizaciones.cabu.co]
 
 ## Licencia
 [MIT]
@@ -66,3 +71,4 @@ $ node server
 [/todos]: http://cotizaciones.cabu.co/todos
 [mit]: https://github.com/cabupy/node-cotizaciones/blob/master/LICENSE
 [package.json]: https://github.com/cabupy/node-cotizaciones/blob/master/package.json
+[cotizaciones.cabu.co]: http://cotizaciones.cabu.co

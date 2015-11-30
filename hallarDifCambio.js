@@ -21,20 +21,8 @@ var findCotizacionPrevia = function(id, moneda, fecha, callback) {
     var respuesta = [];
     //console.time('findCotizacionPrevia()');
     Cotizaciones
-        .find({
-            id: id,
-            moneda: moneda,
-            fecha: {
-                $lt: fecha
-            }
-        }, {
-            _id: 0,
-            compra: 1,
-            venta: 1,
-        })
-        .sort({
-            fecha: -1
-        })
+        .find({ id: id, moneda: moneda, fecha: { $lt: fecha } }, { _id: 0, compra: 1, venta: 1, })
+        .sort({ fecha: -1 })
         .limit(1)
         .exec(function(error, result) {
             //console.log(result);
@@ -60,16 +48,8 @@ var updateDifCambio = function(id, moneda, callback) {
     var difventa = 0;
     console.time('updateDifCambio(' + id + ', ' + moneda + ')');
     Cotizaciones
-        .find({
-            id: id,
-            moneda: moneda/*,
-            fecha: {
-                $gte: getHoy()
-            },*/
-        }, {})
-        .sort({
-            fecha: -1
-        })
+        .find({ id: id, moneda: moneda/*, fecha: { $gte: getHoy() },*/ }, {})
+        .sort({ fecha: -1 })
         .limit(0)
         .exec(function(error, result) {
             //console.log(result);

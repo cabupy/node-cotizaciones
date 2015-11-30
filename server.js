@@ -5,32 +5,21 @@
 */
 
 /* librerias requeridas */
-var cheerio = require('cheerio');
 var cors = require('cors');
 var db = require('./models/db');
 var express = require('express');
-var Q = require('q');
-var request = require('request');
+var morgan = require('morgan');
 
 /* Config */
 var Config = require('./config/config');
 
-/* Modulos */
-/*var BancoAmambay = require('./modules/amambay');
-var BancoAtlas = require('./modules/atlas');
-var BancoBBVA = require('./modules/bbva');
-var CambiosAlberdi = require('./modules/cambiosalberdi');
-var CambiosChaco = require('./modules/cambioschaco');
-var Familiar = require('./modules/familiar');
-var Interfisa = require('./modules/interfisa');
-var MaxiCambios = require('./modules/maxicambios');*/
-var Generico = require('./modules/generico');
-
 /* Instanciamos una app express */
 var app = express();
+var routes = require('./router/router');
 
 /* Habilitamos CORS a todas las rutas */
 app.use(cors());
+app.use(morgan('dev'));
 
 app.set('x-powered-by', false);
 // Agragamos el header powered-by Vamyal S.A. en un middleware
@@ -39,90 +28,8 @@ app.use(function(req, res, next) {
     next();
 });
 
-app.get('/bancoamambay', Generico.getGenerico);
-app.get('/bancoatlas', Generico.getGenerico);
-app.get('/bancobbva', Generico.getGenerico);
-app.get('/cambiosalberdi', Generico.getGenerico);
-app.get('/cambioschaco', Generico.getGenerico);
-app.get('/familiar', Generico.getGenerico);
-app.get('/interfisa', Generico.getGenerico);
-app.get('/maxicambios', Generico.getGenerico);
-
-app.get('/todos', function(req, res) {
-
-    var retorno = [];
-
-    var promises = [
-        Generico.getCotizacionesDB(1,'BancoAmambay'),
-        Generico.getCotizacionesDB(2,'BancoAtlas'),
-        Generico.getCotizacionesDB(3,'BancoBBVA'),
-        Generico.getCotizacionesDB(4,'CambiosAlberdi'),
-        Generico.getCotizacionesDB(5,'CambiosChaco'),
-        Generico.getCotizacionesDB(6,'Familiar'),
-        Generico.getCotizacionesDB(7,'Interfisa'),
-        Generico.getCotizacionesDB(8,'MaxiCambios'),
-    ];
-
-    Q.allSettled(promises).spread(function(
-        BancoAmambay, BancoAtlas, BancoBBVA, CambiosAlberdi, CambiosChaco, Familiar, Interfisa, MaxiCambios
-    ) {
-
-        retorno.push({
-            id: 1,
-            entidad: 'Banco Amambay',
-            datos: (BancoAmambay.state === "fulfilled") ? BancoAmambay.value : []
-        });
-
-        retorno.push({
-            id: 2,
-            entidad: 'Banco Atlas',
-            datos: (BancoAtlas.state === "fulfilled") ? BancoAtlas.value : []
-        });
-
-        retorno.push({
-            id: 3,
-            entidad: 'Banco BBVA',
-            datos: (BancoBBVA.state === "fulfilled") ? BancoBBVA.value : []
-        });
-
-        retorno.push({
-            id: 4,
-            entidad: 'Cambios Alberdi',
-            datos: (CambiosAlberdi.state === "fulfilled") ? CambiosAlberdi.value : []
-        });
-
-        retorno.push({
-            id: 5,
-            entidad: 'Cambios Chaco',
-            datos: (CambiosChaco.state === "fulfilled") ? CambiosChaco.value : []
-        });
-
-        retorno.push({
-            id: 6,
-            entidad: 'Banco Familiar',
-            datos: (Familiar.state === "fulfilled") ? Familiar.value : []
-        });
-
-        retorno.push({
-            id: 7,
-            entidad: 'Interfisa Banco',
-            datos: (Interfisa.state === "fulfilled") ? Interfisa.value : []
-        });
-
-        retorno.push({
-            id: 8,
-            entidad: 'Maxicambios',
-            datos: (MaxiCambios.state === "fulfilled") ? MaxiCambios.value : []
-        });
-
-        res.json(retorno);
-        res.end();
-
-    }).done();
-
-}); // get /todos
-
-app.get('/quien', Generico.getGenerico);
+// Cargamos las rutas habilitadas.
+app.use('/', routes);
 
 var ip = process.env.IP || Config.ip;
 var port = process.env.PORT || Config.port;
